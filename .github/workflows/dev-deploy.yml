@@ -106,8 +106,21 @@ jobs:
         run: |
           sed -i "s|image: ghcr.io/chamodshehanka/argocd-demo:.*|image: ghcr.io/chamodshehanka/argocd-demo:${{ steps.meta.outputs.tags }}|g" gitops/kcd-lahore/deployment.yaml
 
+      # Check if there are any changes
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --exit-code; then
+            echo "No changes detected"
+            echo "no_changes=true" >> $GITHUB_ENV
+          else
+            echo "Changes detected"
+            echo "no_changes=false" >> $GITHUB_ENV
+          fi
+
       # Commit and push the changes to the GitOps repository
       - name: Commit and push the changes to the GitOps repository
+        if: steps.check_changes.outputs.no_changes != 'true'
         run: |
           cd gitops
           git config --global user.email "hcsperera@gmail.com"
@@ -117,4 +130,4 @@ jobs:
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+

@@ -22,7 +22,7 @@ func main() {
 
 	// Root endpoint
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, Folks! \n")
+		fmt.Fprintf(w, "Hello, GitOps! \n")
 	})
 
 	// /hello endpoint
