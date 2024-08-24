@@ -125,6 +125,7 @@ jobs:
       # Commit and push the changes to the GitOps repository
       - name: Commit and push the changes to the GitOps repository
         if: steps.check_changes.outputs.no_changes != 'true'
+        continue-on-error: true
         run: |
           cd gitops
           git config --global user.email "hcsperera@gmail.com"
