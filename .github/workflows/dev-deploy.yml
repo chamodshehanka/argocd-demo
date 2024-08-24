@@ -133,4 +133,4 @@ jobs:
           git commit -m "Update image tag"
           git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITOPS_TOKEN }}
