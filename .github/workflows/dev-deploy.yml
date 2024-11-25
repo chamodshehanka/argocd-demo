@@ -1,4 +1,4 @@
-name: Docker
+name: Surfing ArgoCD App CI
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -108,7 +108,7 @@ jobs:
       # Update the image tag in the GitOps repository
       - name: Update image tag in the GitOps repository
         run: |
-          sed -i "s|image: ghcr.io/chamodshehanka/argocd-demo:.*|image: ghcr.io/chamodshehanka/argocd-demo:${{ steps.meta.outputs.tags }}|g" gitops/kcd-lahore/deployment.yaml
+          sed -i "s|image: ghcr.io/chamodshehanka/argocd-demo:.*|image: ghcr.io/chamodshehanka/argocd-demo:${{ steps.meta.outputs.tags }}|g" gitops/kcd-accra-2024/deployment.yaml
 
       # Check if there are any changes
       - name: Check for changes
@@ -130,7 +130,7 @@ jobs:
           cd gitops
           git config --global user.email "hcsperera@gmail.com"
           git config --global user.name "chamodshehanka"
-          git add kcd-lahore/deployment.yaml
+          git add kcd-accra-2024/deployment.yaml
           git commit -m "Update image tag"
           git push origin main
         env:
