@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/newrelic/go-agent/v3/newrelic"
 	"net/http"
 	"strings"
 )
@@ -16,14 +17,24 @@ type Book struct {
 var books []Book
 
 func main() {
+	app, err := newrelic.NewApplication(
+		newrelic.ConfigAppName("devfest-app-2024"),
+		newrelic.ConfigLicense("<YOUR_NEW_RELIC_LICENSE_KEY>"),
+		newrelic.ConfigDistributedTracerEnabled(true),
+	)
+
+	if err != nil {
+		fmt.Println("Error initializing New Relic agent:", err)
+	}
+
 	books = append(books, Book{ID: "1", Title: "The Great Gatsby", Author: "F. Scott Fitzgerald"})
 	books = append(books, Book{ID: "2", Title: "To Kill a Mockingbird", Author: "Harper Lee"})
 	books = append(books, Book{ID: "3", Title: "1984", Author: "George Orwell"})
 
 	// Root endpoint
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(newrelic.WrapHandleFunc(app, "/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, GitOps! \n")
-	})
+	}))
 
 	// /hello endpoint
 	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
@@ -182,5 +193,3 @@ func findBookByIDWithIndex(bookID string) (Book, int, error) {
 	}
 	return Book{}, -1, fmt.Errorf("Book with ID %s not found", bookID)
 }
-
-// hello III
