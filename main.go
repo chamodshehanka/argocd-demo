@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/newrelic/go-agent/v3/newrelic"
 	"net/http"
+	"os"
 	"strings"
+
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
 type Book struct {
@@ -17,9 +19,17 @@ type Book struct {
 var books []Book
 
 func main() {
+	// Read New Relic license key and app name from environment variables
+    newRelicLicenseKey := os.Getenv("NEW_RELIC_LICENSE_KEY")
+    if newRelicLicenseKey == "" {
+        fmt.Println("NEW_RELIC_LICENSE_KEY environment variable is not set")
+    }
+
+	fmt.Println("NEW_RELIC_LICENSE_KEY is set!")
+	
 	app, err := newrelic.NewApplication(
 		newrelic.ConfigAppName("devfest-app-2024"),
-		newrelic.ConfigLicense("<YOUR_NEW_RELIC_LICENSE_KEY>"),
+		newrelic.ConfigLicense(newRelicLicenseKey),
 		newrelic.ConfigDistributedTracerEnabled(true),
 	)
 
